@@ -1,0 +1,53 @@
+<?xml version="0.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="tall_box.urdf">
+
+  <xacro:arg name="dim_x" default="0.12"/>
+  <xacro:arg name="dim_y" default="0.12"/>
+  <xacro:arg name="dim_z" default="0.30"/>
+  <xacro:arg name="tag_id" default="42"/>
+
+  <link name="body">
+    <contact>
+      <lateral_friction value="2.0"/>
+    </contact>
+    <inertial>
+       <origin rpy="0 0 0" xyz="0 0 ${$(arg dim_z)/2.0}"/>
+       <mass value="1.0"/>
+       <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 ${$(arg dim_z)/2.0}"/>
+      <geometry>
+		    <box size="$(arg dim_x) $(arg dim_y) $(arg dim_z)"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 ${$(arg dim_z)/2.0}"/>
+      <geometry>
+	 	    <box size="$(arg dim_x) $(arg dim_y) $(arg dim_z)"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="tag">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+		    <box size="0.1 0.1 0.001"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <gazebo reference="tag">
+    <material>aruco_6x6_100mm_$(arg tag_id)</material>
+  </gazebo>
+  
+  <joint name="texture_joint" type="fixed">
+    <parent link="body"/>
+    <child link="tag"/>
+    <origin xyz="-${$(arg dim_x)/2.0} 0 ${$(arg dim_z)-0.01-0.05}" rpy="0 1.570796327 0"/>
+  </joint>
+</robot>

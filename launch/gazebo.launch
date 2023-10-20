@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Gazebo & GUI Configuration -->
+  <arg name="gazebo"      default="true"  doc="Should the gazebo simulation be launched? Use false in case if you want to include this file and launch gazebo yourself" />
+  <arg name="headless"    default="false" doc="Should the gazebo GUI be launched?" />
+  <arg name="paused"      default="false" doc="Should the simulation directly be stopped at 0s?" />
+  <arg name="world"       default="$(find uq_aruco_gazebo)/worlds/this.world" doc="Filename to a SDF World for gazebo to use" />
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" if="$(arg gazebo)">
+    <arg name="world_name" value="$(arg world)"/>
+    <arg name="paused" value="true"/>
+    <arg name="gui" value="$(eval not arg('headless'))"/>
+    <arg name="use_sim_time" value="true"/>
+    <env name="GAZEBO_RESOURCE_PATH" value="$(optenv GAZEBO_RESOURCE_PATH):$(find uq_aruco_gazebo)/resources"/>
+    <env name="GAZEBO_MODEL_PATH" value="$(optenv GAZEBO_MODEL_PATH):$(find uq_aruco_gazebo)/models"/>
+  </include>
+
+    <param name="col_description1" command="$(find xacro)/xacro $(find uq_aruco_gazebo)/models/aruco_column/col.urdf.xacro tag_id:=42"/>
+    <node name="$(anon spawn1)" pkg="gazebo_ros" type="spawn_model" args="-param col_description1 -urdf -model aruco_col1 -x 0.5 -y -0.5 -z 0 -R 0 -P 0 -Y 3.14"/>
+
+    <param name="col_description2" command="$(find xacro)/xacro $(find uq_aruco_gazebo)/models/aruco_column/col.urdf.xacro tag_id:=0"/>
+    <node name="$(anon spawn2)" pkg="gazebo_ros" type="spawn_model" args="-param col_description2 -urdf -model aruco_col2 -x 0.5 -y 0 -z 0 -R 0 -P 0 -Y 3.14"/>
+
+    <param name="col_description3" command="$(find xacro)/xacro $(find uq_aruco_gazebo)/models/aruco_column/col.urdf.xacro tag_id:=2"/>
+    <node name="$(anon spawn3)" pkg="gazebo_ros" type="spawn_model" args="-param col_description3 -urdf -model aruco_col3 -x 0.5 -y 0.5 -z 0 -R 0 -P 0 -Y 3.14"/>
+ 
+</launch>
